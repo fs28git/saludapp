@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recetas Saludables</title>
+</head>
+<body>
+  <h1>Listado de Recetas</h1>
+  <ul>
+    <% recetas.forEach(receta => { %>
+      <li>
+        <h2><%= receta.titulo %></h2>
+        <p><%= receta.descripcion %></p>
+        <p><strong>Tiempo de preparación:</strong> <%= receta.tiempoPreparacion %> minutos</p>
+        <p><strong>Dificultad:</strong> <%= receta.dificultad %></p>
+        <h3>Ingredientes:</h3>
+        <ul>
+          <% receta.ingredientes.forEach(ing => { %>
+            <li><%= ing.cantidad ? ing.cantidad + ' ' : '' %><%= ing.unidad ? ing.unidad + ' ' : '' %><%= ing.nombre %></li>
+          <% }) %>
+        </ul>
+        <h3>Instrucciones:</h3>
+        <ol>
+          <% receta.instrucciones.forEach(paso => { %>
+            <li><%= paso %></li>
+          <% }) %>
+        </ol>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

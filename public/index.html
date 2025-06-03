@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SaludApp - Tu compañera de recetas saludables</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <meta name="description" content="SaludApp, la aplicación para descubrir recetas saludables, planificar comidas, compartir en comunidad y conectarte con nutricionistas." />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #user-nav {
+      margin-top: 15px;
+    }
+    button {
+      background-color: #45a049;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #3d8b40;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      background-color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: block;
+    }
+    nav a:hover {
+      background-color: #555;
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    #auth-forms {
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    #auth-forms input, #auth-forms select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 10px 0;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      border: 1px solid #c3e6cb;
+    }
+    .error-message {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      border: 1px solid #f5c6cb;
+    }
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SaludApp</h1>
+    <p>Tu compañera de recetas saludables</p>
+    <div id="user-nav" aria-label="Navegación de usuario">
+      <button id="login-btn" aria-controls="auth-forms" aria-expanded="false">Iniciar Sesión</button>
+      <button id="register-btn" aria-controls="auth-forms" aria-expanded="false">Registrarse</button>
+      <div id="user-profile" style="display:none;" aria-live="polite" aria-atomic="true">
+        <span id="username"></span>
+        <button id="logout-btn">Cerrar Sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <nav aria-label="Menú principal">
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#recetas">Recetas</a></li>
+      <li><a href="#planificador">Planificador</a></li>
+      <li><a href="#comunidad">Comunidad</a></li>
+      <li><a href="#nutricionistas">Nutricionistas</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="inicio" tabindex="-1">
+      <h2>Bienvenido a SaludApp</h2>
+      <div class="hero">
+        <p>Descubre recetas saludables adaptadas a tus necesidades</p>
+        <div id="daily-tip" aria-live="polite"></div>
+        <div id="recipe-suggestion" class="suggestion-box" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="recetas" tabindex="-1" style="display:none;">
+      <h2>Recetas Saludables</h2>
+      <p>Aquí irán las recetas disponibles.</p>
+      <!-- Contenido de recetas -->
+    </section>
+
+    <section id="planificador" tabindex="-1" style="display:none;">
+      <h2>Planificador de Comidas</h2>
+      <p>Organiza tus comidas diarias aquí.</p>
+      <!-- Contenido planificador -->
+    </section>
+
+    <section id="comunidad" tabindex="-1" style="display:none;">
+      <h2>Comunidad SaludApp</h2>
+      <p>Conecta con otros usuarios y comparte consejos.</p>
+      <!-- Contenido comunidad -->
+    </section>
+
+    <section id="nutricionistas" tabindex="-1" style="display:none;">
+      <h2>Nutricionistas</h2>
+      <p>Consulta con profesionales para una mejor dieta.</p>
+      <!-- Contenido nutricionistas -->
+    </section>
+
+    <!-- Formulario de Login/Registro -->
+    <section id="auth-forms" style="display:none;" aria-label="Formularios de autenticación">
+      <div id="login-form">
+        <h2>Iniciar Sesión</h2>
+        <div id="login-messages"></div>
+        <input type="email" id="login-email" placeholder="Email" aria-label="Correo electrónico" required />
+        <input type="password" id="login-password" placeholder="Contraseña" aria-label="Contraseña" required />
+        <button id="submit-login">Ingresar</button>
+        <button id="show-register" aria-controls="register-form" aria-expanded="false">¿No tienes cuenta? Regístrate</button>
+      </div>
+
+      <div id="register-form" style="display:none;">
+        <h2>Registrarse</h2>
+        <div id="register-messages"></div>
+        <input type="text" id="register-name" placeholder="Nombre" aria-label="Nombre completo" required />
+        <input type="email" id="register-email" placeholder="Email" aria-label="Correo electrónico" required />
+        <input type="password" id="register-password" placeholder="Contraseña" aria-label="Contraseña" required />
+        <select id="register-goal" aria-label="Objetivo de salud" required>
+          <option value="" disabled selected>Selecciona tu objetivo</option>
+          <option value="perder peso">Perder peso</option>
+          <option value="aumentar masa">Aumentar masa muscular</option>
+          <option value="mantener">Mantener peso</option>
+          <option value="vegana">Dieta vegana</option>
+          <option value="fitness">Rendimiento fitness</option>
+        </select>
+        <fieldset id="restrictions-container">
+          <legend>Restricciones alimentarias (opcional):</legend>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="restriction" value="sin gluten" /> Sin gluten</label>
+            <label><input type="checkbox" name="restriction" value="sin lactosa" /> Sin lactosa</label>
+            <label><input type="checkbox" name="restriction" value="vegetariano" /> Vegetariano</label>
+            <label><input type="checkbox" name="restriction" value="vegano" /> Vegano</label>
+            <label><input type="checkbox" name="restriction" value="diabético" /> Diabético</label>
+          </div>
+        </fieldset>
+        <button id="submit-register">Registrarse</button>
+        <button id="show-login" aria-controls="login-form" aria-expanded="false">¿Ya tienes cuenta? Inicia sesión</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SaludApp. Todos los derechos reservados.</p>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>
